@@ -3,13 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/subd/Controller.java</file>
-            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/subd/Employee.java</file>
-            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/subd/Room.java</file>
+            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/Controller/RoomController.java</file>
             <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/subd/MainFrame.java</file>
-            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/subd/ServiceOrder.java</file>
-            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/subd/RoomOrder.java</file>
-            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/subd/Service.java</file>
+            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/Controller/RoomOrderController.java</file>
+            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/Controller/Controller.java</file>
+            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/Controller/GuestController.java</file>
+            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/Controller/ServiceOrderController.java</file>
+            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/Controller/EmployeeController.java</file>
+            <file>file:/C:/Users/Админ/Documents/NetBeansProjects/Subd/src/Controller/ServiceController.java</file>
         </group>
     </open-files>
 </project-private>

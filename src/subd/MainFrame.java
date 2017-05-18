@@ -5,27 +5,29 @@
  */
 package subd;
 
+import Entity.RoomOrder;
+import Entity.Service;
+import Entity.Room;
+import Entity.Employee;
+import Entity.Guest;
+import Entity.ServiceOrder;
+import Controller.Controller;
+import Controller.EmployeeController;
+import Controller.GuestController;
+import Controller.RoomController;
+import Controller.RoomOrderController;
+import Controller.ServiceController;
+import Controller.ServiceOrderController;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 
-/**
- *
- * @author Админ
- */
 public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
 
-    /**
-     * Creates new form MainFrame
-     */
     public MainFrame() {
         initComponents();
         controller.addListener(this);
@@ -61,11 +63,9 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         buttonGuestOk = new javax.swing.JButton();
         roomDialog = new javax.swing.JDialog();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         textFieldRoomId = new javax.swing.JTextField();
-        textFieldRoomStatus = new javax.swing.JTextField();
         textFieldRoomTip = new javax.swing.JTextField();
         textFieldRoomCost = new javax.swing.JTextField();
         buttonRoomCancel = new javax.swing.JButton();
@@ -289,8 +289,6 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
 
         jLabel5.setText("Номер:");
 
-        jLabel6.setText("Статус:");
-
         jLabel7.setText("Тип:");
 
         jLabel8.setText("Стоимость:");
@@ -324,14 +322,12 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
                 .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel6)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textFieldRoomId, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textFieldRoomStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textFieldRoomTip, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textFieldRoomCost, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(textFieldRoomId, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(textFieldRoomTip, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(textFieldRoomCost, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                 .addContainerGap(112, Short.MAX_VALUE))
         );
         roomDialogLayout.setVerticalGroup(
@@ -341,19 +337,15 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
                 .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(textFieldRoomId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(textFieldRoomStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(textFieldRoomTip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(textFieldRoomCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                 .addGroup(roomDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonRoomCancel)
                     .addComponent(buttonRoomOk))
@@ -931,11 +923,19 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         try {
             controller.connect(textFieldDataBase.getText(), textFieldPort.getText(),
                     textFieldUsername.getText(), textFieldPassword.getText());
+            guestController = new GuestController(controller.getConnection());
+            roomController = new RoomController(controller.getConnection());
+            employeeController = new EmployeeController(controller.getConnection());
+            serviceController = new ServiceController(controller.getConnection());
+            roomOrderController = new RoomOrderController(controller.getConnection());
+            serviceOrderController = new ServiceOrderController(controller.getConnection());
             setButtons(false);
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+           JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_buttonOkActionPerformed
@@ -947,7 +947,8 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             setButtons(false);
         }
         catch (SQLException ex){
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
         }
     }//GEN-LAST:event_jMenuItemDisconnectActionPerformed
 
@@ -956,10 +957,10 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(controller.isConnected()){
             try {
                 selectedTable = "guest";
-                updateTable();
+                updateGuestTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
         else
@@ -974,10 +975,10 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(controller.isConnected()){
             try {
                 selectedTable = "room";
-                updateTable();
+                updateRoomTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
         else
@@ -990,10 +991,11 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(controller.isConnected()){
             try {
                 selectedTable = "roomorder";
-                updateTable();
+                updateRoomOrderTable();
             } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
         else
@@ -1006,10 +1008,10 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(controller.isConnected()){
             try {
                 selectedTable = "employee";
-                updateTable();
+                updateEmployeeTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
         else
@@ -1022,10 +1024,10 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(controller.isConnected()){
             try {
                 selectedTable = "service";
-                updateTable();
+                updateServiceTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
         else
@@ -1038,10 +1040,11 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(controller.isConnected()){
             try {
                 selectedTable = "serviceorder";
-                updateTable();
+                updateServiceOrderTable();
             } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
         else
@@ -1061,7 +1064,6 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             case "room":
                 mode = 0;
                 textFieldRoomId.setText("");
-                textFieldRoomStatus.setText("");
                 textFieldRoomTip.setText("");
                 textFieldRoomCost.setText("");
                 roomDialog.setVisible(true);
@@ -1078,7 +1080,7 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             case "service":
                 mode = 0;
                 try {
-                    DefaultComboBoxModel model = new DefaultComboBoxModel(controller.getEmployeeList());
+                    DefaultComboBoxModel model = new DefaultComboBoxModel(employeeController.getEmlployeeIds());
                     comboBoxServiceEmployee.setModel(model);
                 } catch (SQLException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -1104,21 +1106,19 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
                 guestDialog.setVisible(false);
                 Object[] data = {textFieldGuestSurname.getText(),
                     textFieldGuestName.getText(), textFieldGuestPatr.getText()};
-                controller.addToDataBase(selectedTable, data);
-                updateTable();
+                guestController.add(data);
+                updateGuestTable();
             } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
         else if (mode == 1){
             try {
                 guestDialog.setVisible(false);
-                Object[] oldData = {guests.get(selectedRow).getSurname(),
-                                    guests.get(selectedRow).getName(),
-                                    guests.get(selectedRow).getPatr()};
+                int id = guests.get(selectedRow).getId();
                 Object[] newData = {textFieldGuestSurname.getText(),
                         textFieldGuestName.getText(), textFieldGuestPatr.getText()};
-                controller.updateDataBase(selectedTable, oldData, newData);
-                updateTable();
+                guestController.update(id, newData);
+                updateGuestTable();
             } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1133,26 +1133,24 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(mode == 0)
             try {
                 roomDialog.setVisible(false);
-                Object[] data = {textFieldRoomId.getText(), textFieldRoomStatus.getText(),
+                Object[] data = {textFieldRoomId.getText(), false,
                     textFieldRoomTip.getText(), textFieldRoomCost.getText()};
-                controller.addToDataBase(selectedTable, data);
-                updateTable();
+                roomController.addToRoom(data);
+                updateRoomTable();
             } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
         else if (mode == 1){
             try {
                 roomDialog.setVisible(false);
-                Object[] oldData = {rooms.get(selectedRow).getId(),
-                                    rooms.get(selectedRow).getBooleanStatus(),
-                                    rooms.get(selectedRow).getTip(),
-                                    rooms.get(selectedRow).getCost()};
-                Object[] newData = {textFieldRoomId.getText(), textFieldRoomStatus.getText(),
+                int id = rooms.get(selectedRow).getId();
+                Object[] newData = {rooms.get(selectedRow).getBooleanStatus(),
                     textFieldRoomTip.getText(), textFieldRoomCost.getText()};
-                controller.updateDataBase(selectedTable, oldData, newData);
-                updateTable();
+                roomController.updateRoom(id, newData);
+                updateRoomTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
     }//GEN-LAST:event_buttonRoomOkActionPerformed
@@ -1164,18 +1162,14 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
     private void buttonRoomOrderOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRoomOrderOkActionPerformed
         try {
             addRoomOrderDialog.setVisible(false);
-            
-//            controller.addRoomOrder((String)comboBoxRooms.getModel().getSelectedItem()),
-//                                    Integer.parseInt(textFieldRoomOrderRoomId.getText()),
-//                                    Integer.parseInt(textFieldRoomOrderCountDay.getText()),
-//                                    textFieldRoomOrderOrderDate.getText());
-            controller.addRoomOrder((String)comboBoxGuest.getModel().getSelectedItem(),
+            roomOrderController.addRoomOrder((int)comboBoxGuest.getModel().getSelectedItem(),
                     (int)comboBoxRoom.getModel().getSelectedItem(),
                     Integer.parseInt(textFieldRoomOrderCountDay.getText()),
                     textFieldRoomOrderOrderDate.getText());
-            updateTable();
+            updateRoomOrderTable();
         } catch (SQLException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
         }
     }//GEN-LAST:event_buttonRoomOrderOkActionPerformed
 
@@ -1186,19 +1180,19 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             return;
         }
         try {
-            DefaultComboBoxModel modelGuest = new DefaultComboBoxModel(controller.getGuestList());
+            DefaultComboBoxModel modelGuest = new DefaultComboBoxModel(guestController.getGuestIds());
             comboBoxGuest.setModel(modelGuest);
-            DefaultComboBoxModel modelRooms = new DefaultComboBoxModel(controller.getRoomList());
+            DefaultComboBoxModel modelRooms = new DefaultComboBoxModel(roomController.getRoomIds());
             comboBoxRoom.setModel(modelRooms);
         } catch (SQLException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
         }
             
         addRoomOrderDialog.setVisible(true);
     }//GEN-LAST:event_menuItemAddRoomOrderActionPerformed
 
     private void buttonEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEditActionPerformed
-        
         selectedRow = outputTable.getSelectedRow();
         if(selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Выберите строку, данные в которой необходимо отредактировать",
@@ -1216,7 +1210,6 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             case "room":
                 mode = 1;
                 textFieldRoomId.setText(String.valueOf(rooms.get(selectedRow).getId()));
-                textFieldRoomStatus.setText(String.valueOf(rooms.get(selectedRow).getBooleanStatus()));
                 textFieldRoomTip.setText(rooms.get(selectedRow).getTip());
                 textFieldRoomCost.setText(String.valueOf(rooms.get(selectedRow).getCost()));
                 roomDialog.setVisible(true);
@@ -1233,10 +1226,11 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             case "service":
                 mode = 1;
                 try {
-                    DefaultComboBoxModel model = new DefaultComboBoxModel(controller.getEmployeeList());
+                    DefaultComboBoxModel model = new DefaultComboBoxModel(employeeController.getEmlployeeIds());
                     comboBoxServiceEmployee.setModel(model);
                 } catch (SQLException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
                 }
                 textFieldServiceName.setText(services.get(selectedRow).getName());
                 textFieldServiceCost.setText(String.valueOf(services.get(selectedRow).getCost()));
@@ -1259,19 +1253,22 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         try {
         switch(selectedTable){
             case "guest":
-                controller.deleteFromDataBase(selectedTable, guests.get(selectedRow).getId());
+                guestController.delete(guests.get(selectedRow).getId());
+                updateGuestTable();
                 break;
             case "room":
-                controller.deleteFromDataBase(selectedTable, rooms.get(selectedRow).getId());
+                roomController.delete(rooms.get(selectedRow).getId());
+                updateRoomTable();
                 break;
             case "employee":
-                controller.deleteFromDataBase(selectedTable, employees.get(selectedRow).getId());
+                employeeController.delete(employees.get(selectedRow).getId());
+                updateEmployeeTable();
                 break;
             case "service":
-                controller.deleteFromDataBase(selectedTable, services.get(selectedRow).getId());
+                serviceController.delete(services.get(selectedRow).getId());
+                updateServiceTable();
                 break;
         }
-        updateTable();
         } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Удаление данной строки приводит к нарушению"
@@ -1291,27 +1288,24 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
                 Object[] data = {textFieldEmployeeSurname.getText(),
                 textFieldEmployeeName.getText(), textFieldEmployeePatr.getText(),
                 textFieldEmployeePosition.getText(), textFieldEmployeeMoney.getText()};
-                controller.addToDataBase(selectedTable, data);
-                updateTable();
+                employeeController.addToEmployee(data);
+                updateEmployeeTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         else if (mode == 1){
             try {
                 employeeDialog.setVisible(false);
-                Object[] oldData = {employees.get(selectedRow).getSurname(),
-                                    employees.get(selectedRow).getName(),
-                                    employees.get(selectedRow).getPatr(),
-                                    employees.get(selectedRow).getPosition(),
-                                    employees.get(selectedRow).getMoney()};
+                int id = employees.get(selectedRow).getId();
                 Object[] newData = {textFieldEmployeeSurname.getText(),
                     textFieldEmployeeName.getText(), textFieldEmployeePatr.getText(),
                     textFieldEmployeePosition.getText(), textFieldEmployeeMoney.getText()};
-                controller.updateDataBase(selectedTable, oldData, newData);
-                updateTable();
+                employeeController.updateEmployee(id, newData);
+                updateEmployeeTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
     }//GEN-LAST:event_buttonEmployeeOkActionPerformed
@@ -1324,26 +1318,25 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         if(mode == 0)
             try {
                 serviceDialog.setVisible(false);
-                Object[] data = {(String)comboBoxServiceEmployee.getSelectedItem(),
+                Object[] data = {(int)comboBoxServiceEmployee.getSelectedItem(),
                 textFieldServiceName.getText(), textFieldServiceCost.getText()};
-                controller.addToDataBase(selectedTable, data);
-                updateTable();
+                serviceController.addToService(data);
+                updateServiceTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         else if (mode == 1){
             try {
                 serviceDialog.setVisible(false);
-                Object[] oldData = {services.get(selectedRow).getEmployeeId(),
-                                    services.get(selectedRow).getName(),
-                                    services.get(selectedRow).getCost()};
-                Object[] newData = {controller.getEmployeeByName((String)comboBoxServiceEmployee.getSelectedItem()),
+                int id = services.get(selectedRow).getId();
+                Object[] newData = {(int)comboBoxServiceEmployee.getSelectedItem(),
                 textFieldServiceName.getText(), textFieldServiceCost.getText()};
-                controller.updateDataBase(selectedTable, oldData, newData);
-                updateTable();
+                serviceController.updateService(id, newData);
+                updateServiceTable();
             } catch (SQLException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, ex.getMessage(),
+                    "Ошибка", WIDTH);
             }
         }
     }//GEN-LAST:event_buttonServiceOkActionPerformed
@@ -1355,7 +1348,7 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             return;
         }
         try {
-            Object[][] rooms = controller.getNotEnabledRooms();
+            Object[][] rooms = roomOrderController.getNotEnabledRooms();
             Object[] columns = {"Клиент", "Номер"};
             DefaultTableModel modelRoom = new DefaultTableModel(columns, 0);
                 for(int i = 0; i < rooms[0].length; ++i){
@@ -1378,7 +1371,7 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
     private void buttonRemoveOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRemoveOkActionPerformed
         try {
             int id = Integer.parseInt((String)comboBoxRooms.getModel().getSelectedItem());
-            controller.setRoomFree(id);
+            roomOrderController.setRoomFree(id);
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1392,9 +1385,9 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
             return;
         }
         try {
-            DefaultComboBoxModel modelOrder = new DefaultComboBoxModel(controller.getRoomOrderList());
+            DefaultComboBoxModel modelOrder = new DefaultComboBoxModel(roomOrderController.getRoomOrderIds());
             comboBoxOrder.setModel(modelOrder);
-            DefaultComboBoxModel modelService = new DefaultComboBoxModel(controller.getServiceList());
+            DefaultComboBoxModel modelService = new DefaultComboBoxModel(serviceController.getServicesIds());
             comboBoxService.setModel(modelService);
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -1408,14 +1401,10 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
 
     private void buttonServiceOrderOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonServiceOrderOkActionPerformed
         try {
-//            controller.addServiceOrder(Integer.parseInt(textFieldServiceOrderId.getText()),
-//                    Integer.parseInt(textFieldServiceOrderOrderId.getText()),
-//                    Integer.parseInt(textFieldServiceOrderServiceId.getText()),
-//                    textFieldServiceOrderOrderDate.getText());
-            controller.addServiceOrder((String)comboBoxOrder.getSelectedItem(),
-                    controller.getServiceIdByName((String)comboBoxService.getSelectedItem()),
+            serviceOrderController.addServiceOrder((int)comboBoxOrder.getSelectedItem(),
+                    (int)comboBoxService.getSelectedItem(),
                     textFieldServiceOrderOrderDate.getText());
-            updateTable();
+            updateServiceOrderTable();
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1458,11 +1447,9 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
         });
     }
     
-    private void updateTable() throws SQLException{
-        if(controller.isConnected())
-            switch(selectedTable){
-                case "guest":
-                    guests = controller.getGuests();
+    private void updateGuestTable() throws SQLException{
+        if(controller.isConnected()){
+            guests = guestController.getList();
                     Object[] namesGuest = {"ID", "Фамилия", "Имя", "Отчество"};
                     DefaultTableModel modelGuest = new DefaultTableModel(namesGuest, 0);
                     for(int i = 0; i < guests.size(); ++i){
@@ -1474,9 +1461,14 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
                     }
                     outputTable.setModel(modelGuest);
                     setButtons(true);
-                    break;
-                case "room":
-                    rooms = controller.getRooms();
+        }else
+            JOptionPane.showMessageDialog(this, "Отсутствует подключение к базе данных",
+                    "Ошибка", WIDTH);
+    }
+    
+    private void updateRoomTable() throws SQLException{
+        if(controller.isConnected()){
+            rooms = roomController.getRooms();
                     Object[] names = {"Номер", "Статус", "Тип номера", "Стоимость"};
                     DefaultTableModel modelRoom = new DefaultTableModel(names, 0);
                     for(int i = 0; i < rooms.size(); ++i){
@@ -1488,77 +1480,94 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
                     }
                     outputTable.setModel(modelRoom);
                     setButtons(true);
-                    break;
-                case "roomorder":
-                    roomOrders = controller.getRoomOrders();
-                    Object[] namesRoomOrder = {"ID", "Посетитель", "Номер", "Количество дней", "Дата заказа",
-                        "Стоимость"};
-                    DefaultTableModel modelRoomOrder = new DefaultTableModel(namesRoomOrder, 0);
-                    for(int i = 0; i < roomOrders.size(); ++i){
-                        Object[] row = {roomOrders.get(i).getId(),
-                                        roomOrders.get(i).getGuest().toString(),
-                                        roomOrders.get(i).getRoomId(),
-                                        roomOrders.get(i).getCountDay(),
-                                        roomOrders.get(i).getOrderDate(),
-                                        roomOrders.get(i).getChek()};
-                        modelRoomOrder.insertRow(i, row);
-                    }
-                    outputTable.setModel(modelRoomOrder);
-                    setButtons(false);
-                    break;
-                case "employee":
-                    employees = controller.getEmployees();
-                    Object[] namesEmployee = {"ID", "Фамилия", "Имя", "Отчество", "Должность", "Зар. плата"};
-                    DefaultTableModel modelEmployee = new DefaultTableModel(namesEmployee, 0);
-                    for(int i = 0; i < employees.size(); ++i){
-                        Object[] row = {employees.get(i).getId(),
-                                        employees.get(i).getSurname(),
-                                        employees.get(i).getName(),
-                                        employees.get(i).getPatr(),
-                                        employees.get(i).getPosition(),
-                                        employees.get(i).getMoney()};
-                        modelEmployee.insertRow(i, row);
-                    }
-                    outputTable.setModel(modelEmployee);
-                    setButtons(true);
-                    break;
-                case "service":
-                    services = controller.getServices();
-                    Object[] namesService = {"ID", "Сотрудник", "Наименование", "Цена"};
-                    DefaultTableModel modelService = new DefaultTableModel(namesService, 0);
-                    for(int i = 0; i < services.size(); ++i){
-                        Object[] row = {services.get(i).getId(),
-                                        services.get(i).getEmployee().toString(),
-                                        services.get(i).getName(),
-                                        services.get(i).getCost()};
-                        modelService.insertRow(i, row);
-                    }
-                    outputTable.setModel(modelService);
-                    setButtons(true);
-                    break;
-                case "serviceorder":
-                    serviceOrders = controller.getServiceOrders();
-                    Object[] namesServiceOrder = {"ID", "Заказ", "Услуга", "Дата"};
-                    DefaultTableModel modelServiceOrder = new DefaultTableModel(namesServiceOrder, 0);
-                    for(int i = 0; i < serviceOrders.size(); ++i){
-                        Object[] row = {serviceOrders.get(i).getId(),
-                                        serviceOrders.get(i).getRoomOrder().toString(),
-                                        serviceOrders.get(i).getService().toString(),
-                                        serviceOrders.get(i).getOrderDate()};
-                        modelServiceOrder.insertRow(i, row);
-                    }
-                    outputTable.setModel(modelServiceOrder);
-                    setButtons(false);
-                    break;
-                default:
-//                    JOptionPane.showMessageDialog(this, "На данном этапе добавление данных невозможно",
-//                        "Ошибка", WIDTH);
-                    break;
-            }
-        else
+        }else
             JOptionPane.showMessageDialog(this, "Отсутствует подключение к базе данных",
                     "Ошибка", WIDTH);
     }
+    
+    private void updateEmployeeTable() throws SQLException{
+        if(controller.isConnected()){
+            employees = employeeController.getEmployees();
+            Object[] namesEmployee = {"ID", "Фамилия", "Имя", "Отчество", "Должность", "Зар. плата"};
+            DefaultTableModel modelEmployee = new DefaultTableModel(namesEmployee, 0);
+            for(int i = 0; i < employees.size(); ++i){
+                Object[] row = {employees.get(i).getId(),
+                                employees.get(i).getSurname(),
+                                employees.get(i).getName(),
+                                employees.get(i).getPatr(),
+                                employees.get(i).getPosition(),
+                                employees.get(i).getMoney()};
+                modelEmployee.insertRow(i, row);
+            }
+            outputTable.setModel(modelEmployee);
+            setButtons(true);
+        }else
+            JOptionPane.showMessageDialog(this, "Отсутствует подключение к базе данных",
+                    "Ошибка", WIDTH);
+        
+    }
+    
+    public void updateServiceTable() throws SQLException {
+        if(controller.isConnected()){
+            services = serviceController.getServices();
+            Object[] namesService = {"ID", "Сотрудник", "Наименование", "Цена"};
+            DefaultTableModel modelService = new DefaultTableModel(namesService, 0);
+            for(int i = 0; i < services.size(); ++i){
+                Object[] row = {services.get(i).getId(),
+                                services.get(i).getEmployee().toString(),
+                                services.get(i).getName(),
+                                services.get(i).getCost()};
+                modelService.insertRow(i, row);
+            }
+            outputTable.setModel(modelService);
+            setButtons(true);
+        }else
+            JOptionPane.showMessageDialog(this, "Отсутствует подключение к базе данных",
+                    "Ошибка", WIDTH);
+    }
+    
+    public void updateRoomOrderTable() throws SQLException {
+        if(controller.isConnected()){
+            roomOrders = roomOrderController.getRoomOrders();
+            Object[] namesRoomOrder = {"ID", "Посетитель", "Номер", "Количество дней", "Дата заказа",
+                "Стоимость"};
+            DefaultTableModel modelRoomOrder = new DefaultTableModel(namesRoomOrder, 0);
+            for(int i = 0; i < roomOrders.size(); ++i){
+                Object[] row = {roomOrders.get(i).getId(),
+                                roomOrders.get(i).getGuest().toString(),
+                                roomOrders.get(i).getRoomId(),
+                                roomOrders.get(i).getCountDay(),
+                                roomOrders.get(i).getOrderDate(),
+                                roomOrders.get(i).getChek()};
+                modelRoomOrder.insertRow(i, row);
+            }
+            outputTable.setModel(modelRoomOrder);
+            setButtons(false);
+        }else
+            JOptionPane.showMessageDialog(this, "Отсутствует подключение к базе данных",
+                    "Ошибка", WIDTH);
+    }
+    
+    private void updateServiceOrderTable() throws SQLException{
+        if(controller.isConnected()){
+            updateRoomOrderTable();
+            serviceOrders = serviceOrderController.getServiceOrders();
+                Object[] namesServiceOrder = {"ID", "Заказ", "Услуга", "Дата"};
+                DefaultTableModel modelServiceOrder = new DefaultTableModel(namesServiceOrder, 0);
+                for(int i = 0; i < serviceOrders.size(); ++i){
+                    Object[] row = {serviceOrders.get(i).getId(),
+                                    serviceOrders.get(i).getRoomOrder().toString(),
+                                    serviceOrders.get(i).getService().toString(),
+                                    serviceOrders.get(i).getOrderDate()};
+                    modelServiceOrder.insertRow(i, row);
+                }
+                outputTable.setModel(modelServiceOrder);
+                setButtons(false);
+        }else
+            JOptionPane.showMessageDialog(this, "Отсутствует подключение к базе данных",
+                    "Ошибка", WIDTH);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog addConnectionDialog;
@@ -1609,7 +1618,6 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1656,13 +1664,18 @@ public class MainFrame extends javax.swing.JFrame implements ConnectionChanged{
     private javax.swing.JTextField textFieldRoomId;
     private javax.swing.JTextField textFieldRoomOrderCountDay;
     private javax.swing.JTextField textFieldRoomOrderOrderDate;
-    private javax.swing.JTextField textFieldRoomStatus;
     private javax.swing.JTextField textFieldRoomTip;
     private javax.swing.JTextField textFieldServiceCost;
     private javax.swing.JTextField textFieldServiceName;
     private javax.swing.JTextField textFieldServiceOrderOrderDate;
     private javax.swing.JTextField textFieldUsername;
     // End of variables declaration//GEN-END:variables
+private GuestController guestController;
+private RoomController roomController;
+private EmployeeController employeeController;
+private ServiceController serviceController;
+private RoomOrderController roomOrderController;
+private ServiceOrderController serviceOrderController;
 private final Controller controller = new Controller();
 List<Guest> guests;
 List<Room> rooms;

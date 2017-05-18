@@ -251,15 +251,13 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="textFieldRoomId" min="-2" pref="100" max="-2" attributes="0"/>
-                      <Component id="textFieldRoomStatus" min="-2" pref="100" max="-2" attributes="0"/>
-                      <Component id="textFieldRoomTip" min="-2" pref="100" max="-2" attributes="0"/>
-                      <Component id="textFieldRoomCost" min="-2" pref="100" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="textFieldRoomId" pref="100" max="32767" attributes="0"/>
+                      <Component id="textFieldRoomTip" pref="100" max="32767" attributes="0"/>
+                      <Component id="textFieldRoomCost" pref="100" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="112" max="32767" attributes="0"/>
               </Group>
@@ -273,22 +271,17 @@
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="textFieldRoomId" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="textFieldRoomStatus" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="textFieldRoomTip" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="textFieldRoomCost" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="65" max="32767" attributes="0"/>
+                  <EmptySpace pref="82" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="buttonRoomCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="buttonRoomOk" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -304,11 +297,6 @@
             <Property name="text" type="java.lang.String" value="&#x41d;&#x43e;&#x43c;&#x435;&#x440;:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel6">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441;:"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x422;&#x438;&#x43f;:"/>
@@ -320,8 +308,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="textFieldRoomId">
-        </Component>
-        <Component class="javax.swing.JTextField" name="textFieldRoomStatus">
         </Component>
         <Component class="javax.swing.JTextField" name="textFieldRoomTip">
         </Component>
